@@ -175,19 +175,19 @@ export const content = {
     subtitle: "Get in Touch",
     social_media: [
       {
-        text: "zadeaj10@gmail.com",
+        text: "paperchain",
         icon: GrMail,
-        link: "mailto:zadeaj10@gmail.com",
+        link: "mailto:paperchain",
       },
       {
-        text: "+91 7021036469",
+        text: "+91 123456789",
         icon: MdCall,
-        link: "https://wa.me/7021036469",
+        link: "https://wa.me/123456789",
       },
       {
         text: "PRANA",
         icon: BsInstagram,
-        link: "https://www.instagram.com/_.4nushk4._/",
+        link: " ",
       },
     ],
   },
