@@ -10,8 +10,8 @@ function Home() {
       <Navbar />
       <Hero />
       <Skills/>
-      <Testimonials />
-      <Contact />
+      {/* <Testimonials />
+      <Contact /> */}
       <footer className="p-3 text-center">
         <h6 className="mb-3">PaperChain</h6>
         <p>Prana © All CopyRights Reserved 2024</p>
