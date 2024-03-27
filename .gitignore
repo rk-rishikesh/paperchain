@@ -13,6 +13,8 @@
 # production
 /build
 
+/node_modules
+
 # sanity
 sanity/node_modules
 
