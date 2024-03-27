@@ -72,25 +72,25 @@ export const content = {
     subtitle: "What We Offer",
     skills_content: [
       {
-        name: "Document Upload",
+        name: "Issue Document",
         para: " ",
-        logo: figma,
+        logo: "https://static.vecteezy.com/system/resources/previews/010/882/101/original/clipboard-note-taking-paper-3d-icon-illustration-png.png",
       },
       {
-        name: "PaperChain Registration",
+        name: "Verify Document",
         para: " ",
-        logo: nodejs,
+        logo: "https://static.vecteezy.com/system/resources/previews/010/882/101/original/clipboard-note-taking-paper-3d-icon-illustration-png.png",
       },
-      {
-        name: "QRCodeIssuerSignature",
-        para: " ",
-        logo: ps,
-      },
-      {
-        name: "Verification",
-        para: " ",
-        logo: reactjs,
-      }
+      // {
+      //   name: "QRCodeIssuerSignature",
+      //   para: " ",
+      //   logo: "https://static.vecteezy.com/system/resources/previews/010/882/101/original/clipboard-note-taking-paper-3d-icon-illustration-png.png",
+      // },
+      // {
+      //   name: "Verification",
+      //   para: " ",
+      //   logo: "https://static.vecteezy.com/system/resources/previews/010/882/101/original/clipboard-note-taking-paper-3d-icon-illustration-png.png",
+      // }
     ],
     icon: MdArrowForward,
   },

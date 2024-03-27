@@ -1,29 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { content } from "../Content";
+import backgroundImage from "../assets/images/Hero/person3.png";
+import { useHelia } from "../hooks/useHelia";
+import FileUploader from "./FileUploader";
+import FileProvider from "../provider/FileProvider";
+import CarCreator from "./CarCreator";
+import { useSDK } from "@metamask/sdk-react";
 
-const DocumentUpload = ({ onUpload }) => {
-  const { hero } = content;
-  const [document, setDocument] = useState(null);
+const DocumentUpload = () => {
+  const [account, setAccount] = useState("");
+    const { sdk, connected, connecting, provider, chainId } = useSDK();
 
-  const handleDocumentUpload = (event) => {
-    const uploadedDocument = event.target.files[0];
-    setDocument(uploadedDocument);
-  };
+  // const [wallet, setWallet] = useState("");
 
-  const handleUpload = () => {
-    if (document) {
-      onUpload(document);
-      setDocument(null);
-    } else {
-      alert("Please upload a document");
+  useEffect(() => {
+    connect();
+  }, []);
+
+
+  const connect = async () => {
+    try {
+        const accounts = await sdk?.connect();
+        setAccount(accounts?.[0]);
+    } catch (err) {
+        console.warn("failed to connect..", err);
     }
-  };
+};
 
   return (
     <section id="document-upload" className="overflow-hidden relative">
       {/* Image */}
-      <img
-        src={hero.image1}
+      {/* <button style={{ padding: 10, margin: 10 }} onClick={connect}>
+                Connect
+            </button>
+            {connected && (
+                <div>
+                    <>
+                        {chainId && `Connected chain: ${chainId}`}
+                        <p></p>
+                        {account && `Connected account: ${account}`}
+                    </>
+                </div>
+            )} */}
+      <div
         style={{
           backgroundPosition: "center",
           backgroundSize: "cover",
@@ -32,10 +51,11 @@ const DocumentUpload = ({ onUpload }) => {
           height: "100vh",
           opacity: 0.7,
           position: "absolute", // Ensure image is below text content
+          backgroundImage: `url(${backgroundImage})`,
         }}
         alt="..."
         className="h-full object-cover"
-      />
+      ></div>
 
       {/* Text content */}
       <div className="min-h-screen relative flex flex-col justify-center items-center">
@@ -50,31 +70,10 @@ const DocumentUpload = ({ onUpload }) => {
                 </h3>
               </div>
               <div class="flex flex-col gap-4 p-6">
-                <label for="file" class="custum-file-upload">
-                  <div class="icon flex justify-center items-center">
-                    <img
-                      className="w-32"
-                      src="https://cdn-icons-png.freepik.com/512/9737/9737932.png"
-                    />
-                  </div>
-                  <div class="text">
-                    <p class="mt-6 flex justify-center font-sans text-sm font-light leading-normal text-inherit antialiased">
-                      Click to upload image
-                    </p>
-                  </div>
-                  <input
-                    onChange={handleDocumentUpload}
-                    id="file"
-                    type="file"
-                    style={{display:"none"}}
-                  />
-                </label>
-                <button
-                  onClick={handleUpload}
-                  className="bg-black text-white py-2 px-4 rounded-lg focus:outline-none"
-                >
-                  Upload
-                </button>
+                <FileProvider>
+                  <FileUploader />
+                  <CarCreator />
+                </FileProvider>
               </div>
             </div>
           </div>

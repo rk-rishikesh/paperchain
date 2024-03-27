@@ -20,28 +20,28 @@ const Skills = () => {
             <div
               key={i}
               data-aos="fade-up"
-              
-              className="bg-white sm:cursor-pointer 
+              className=" sm:cursor-pointer 
                relative group w-full flex items-center
-                gap-5 p-5 max-w-sm rounded-md border-2 border-slate-200"
+                gap-5 p-5 max-w-sm rounded-md"
             >
-              <div>
-                <img
-                  src={skill.logo}
-                  alt="..."
-                  className="w-10 group-hover:scale-125 duration-50"
-                />
-              </div>
-              <div>
-                <h6>
-                  <Link to={`/${skill.name.toLowerCase().replace(" ", "-")}`}>
-                    {skill.name}
-                  </Link>
-                </h6>
-                <p className="italic">{skill.para}</p>
-                <div className="text-xl absolute top-3 right-3">
-                  {skills.icon}
-                </div>
+              <div class="flex items-center p-3 w-72 h-28 bg-white rounded-md shadow-lg">
+                <section class="flex justify-center items-center w-14 h-14 rounded-full shadow-md hover:cursor-pointer hover:scale-110 duration-300">
+                  <img
+                    src={skill.logo}
+                    alt="..."
+                    className="w-10 group-hover:scale-125 duration-50"
+                  />
+                </section>
+
+                <section class="block border-l border-gray-300 m-3">
+                  <div class="pl-3">
+                    <Link to={`/${skill.name.toLowerCase().replace(" ", "-")}`}>
+                      <h3 class="bg-clip-text text-transparent bg-gradient-to-l from-[#005BC4] to-[#27272A] text-lg font-bold">
+                        {skill.name}
+                      </h3>
+                    </Link>
+                  </div>
+                </section>
               </div>
             </div>
           ))}

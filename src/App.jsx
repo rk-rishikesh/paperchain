@@ -6,8 +6,6 @@ import Home from "./components/Home";
 import { useEffect } from "react";
 import Skills from './components/Skills';
 import DocumentUpload from './pages/DocumentUpload';
-import PaperChainRegistration from './pages/PaperChainRegistration';
-import QRCodeIssuerSignature from './pages/QRCodeIssuerSignature';
 import Verification from './pages/Verification';
 // Animation package
 import Aos from "aos";
@@ -26,10 +24,8 @@ const App = () => {
       <Routes>
         <Route path="/" exact element={<Home />} />
         <Route path="/skills" element={<Skills />} />
-        <Route path ="/paperchain-registration" element= {<PaperChainRegistration />}/> 
-        <Route path="/document-upload" element={<DocumentUpload />} />
-        <Route path ="/qrCodeissuersignature" element= {<QRCodeIssuerSignature />}/> 
-        <Route path="/verification" element={<Verification />} /> 
+        <Route path="/issue-document" element={<DocumentUpload />} />
+        <Route path="/verify-document" element={<Verification />} /> 
       </Routes>
     </div>
   );
