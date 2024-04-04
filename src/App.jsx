@@ -15,11 +15,11 @@ import Aos from "aos";
 import "aos/dist/aos.css";
 
 const App = () => {
-  const [publicKey, setPublicKey] = useState();
-  const [connected, setConnected] = useState(false);
-  const [chainId, setChainId] = useState();
-  const [msg, setMsg] = useState();
-  const [contract, setContract] = useState();
+  // const [publicKey, setPublicKey] = useState();
+  // const [connected, setConnected] = useState(false);
+  // const [chainId, setChainId] = useState();
+  // const [msg, setMsg] = useState();
+  // const [contract, setContract] = useState();
 
   useEffect(() => {
     Aos.init({
@@ -29,44 +29,44 @@ const App = () => {
     });
 
   }, []);
-  const connectButton = async () => {
-    const { ethereum } = window;
-    if (ethereum.isMetaMask) {
-      try {
-        await ethereum.request({ method: 'eth_requestAccounts' });
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const network = await provider.getNetwork();
-        setChainId(network.chainId);
-        const signer = provider.getSigner();
-        setPublicKey(await signer.getAddress());
-        const contract = new ethers.Contract(PaperChainAddress, PaperChainABI, signer);
-        setContract(contract);
-        setConnected(true);
-      } catch (error) {
-        console.error(error);
-        setMsg("Error connecting to MetaMask");
-      }
-    } else {
-      setMsg("Install MetaMask");
-    }
-  };
-  const writeDocument = async (_documentRoot) => {
-    try {
-      await contract.storeDoc(_documentRoot);
-      console.log("Document written successfully!");
-    } catch (error) {
-      console.error("Error writing document:", error);
-    }
-  };
+  // const connectButton = async () => {
+  //   const { ethereum } = window;
+  //   if (ethereum.isMetaMask) {
+  //     try {
+  //       await ethereum.request({ method: 'eth_requestAccounts' });
+  //       const provider = new ethers.providers.Web3Provider(ethereum);
+  //       const network = await provider.getNetwork();
+  //       setChainId(network.chainId);
+  //       const signer = provider.getSigner();
+  //       setPublicKey(await signer.getAddress());
+  //       const contract = new ethers.Contract(PaperChainAddress, PaperChainABI, signer);
+  //       setContract(contract);
+  //       setConnected(true);
+  //     } catch (error) {
+  //       console.error(error);
+  //       setMsg("Error connecting to MetaMask");
+  //     }
+  //   } else {
+  //     setMsg("Install MetaMask");
+  //   }
+  // };
+  // const writeDocument = async (_documentRoot) => {
+  //   try {
+  //     await contract.storeDoc(_documentRoot);
+  //     console.log("Document written successfully!");
+  //   } catch (error) {
+  //     console.error("Error writing document:", error);
+  //   }
+  // };
 
-  const readNotice = async (_documentRoot, _merkleProof) => {
-    try {
-      const isValid = await contract.checkValidity(_documentRoot, _merkleProof);
-      console.log('Document validity:', isValid);
-    } catch (error) {
-      console.error('Error checking document validity:', error);
-    }
-  };
+  // const readNotice = async (_documentRoot, _merkleProof) => {
+  //   try {
+  //     const isValid = await contract.checkValidity(_documentRoot, _merkleProof);
+  //     console.log('Document validity:', isValid);
+  //   } catch (error) {
+  //     console.error('Error checking document validity:', error);
+  //   }
+  // };
 
 
   

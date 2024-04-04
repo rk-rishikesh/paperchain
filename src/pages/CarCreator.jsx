@@ -7,7 +7,8 @@ import { useFiles } from "../hooks/useFiles";
 import { useHelia } from "../hooks/useHelia";
 import { CommP } from "@web3-storage/data-segment";
 import { useSDK } from "@metamask/sdk-react";
-
+import { PaperChainAddress, PaperChainABI } from "../contract/PaperChain";
+import { ethers } from "ethers";
 import { generateMerkelProof } from "../merkeltree/generateMerkelProof";
 
 /**
@@ -65,6 +66,10 @@ export default function CarCreator() {
   const [pieceCID, setPieceCID] = useState("");
   const [pieceSize, setPieceSize] = useState(0);
   const [carSize, setCarSize] = useState(0);
+  const [merkleRoot, setMerkelRoot] = useState("");
+  const [leafInput, setLeafInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [signed, setSigned] = useState(false);
 
   const heliaCar = useMemo(() => {
     if (helia == null) {
@@ -118,17 +123,14 @@ export default function CarCreator() {
       // await the blob since `out` will have things yielded from the heliaCar.export above.
       setCarBlob(await carBlob);
       setRootCID(rootCID);
-
       let docs = [];
       docs.push("PaperChainSignature");
-      docs.push(rootCID.toString());
+      docs.push(rootCID?.toString());
 
       console.log(docs);
       const details = await generateMerkelProof(docs, docs[1]);
       console.log(details);
-
       // Execute Contract Here
-      
     };
     asyncFn();
   }, [files, heliaFs, heliaCar]);
@@ -164,26 +166,94 @@ export default function CarCreator() {
     }
   };
 
+  const createDossier = async () => {
+    setLoading(true);
+    const { ethereum } = window;
+    var tx;
+    if (ethereum) {
+      // @ts-ignore
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = await provider.getSigner();
+      console.log(signer);
+      const paperChain = new ethers.Contract(
+        PaperChainAddress,
+        PaperChainABI,
+        signer
+      );
+      let docs = [];
+      docs.push("PaperChainSignature");
+      docs.push(rootCID?.toString());
+
+      console.log(docs);
+      const details = await generateMerkelProof(docs, docs[1]);
+      console.log(details.contractLeafInput);
+      console.log(details.merkleRoot);
+      const transaction = await paperChain.storeDoc(
+        "0x" + details.contractLeafInput,
+        details.merkleRoot
+      );
+
+      console.log(transaction);
+      await transaction.wait();
+
+      console.log(transaction.hash);
+    }
+    console.log("Create Dossier");
+    setLoading(false);
+    setSigned(true);
+    return tx;
+  };
+
   if (rootCID == null || files.length === 0) {
     return null;
   }
 
-  return (
-    <div style={{ borderRadius: "3px", padding: "1rem" }}>
-      <div>
-        <b>Piece Size: </b>
-        <span>{pieceSize}</span>
-        <br />
-        <b>Piece CID: </b>
-        <span>{pieceCID}</span>
-        <br />
-        <b>Car file CID: </b>
-        <span>{rootCID.toString()}</span>
-        <br />
-        <b>Car Size: </b>
-        <span>{carBlob?.size}</span>
+  if (loading) {
+    return (
+      <>
+        <div className="flex flex-row gap-2 justify-center mt-8 mb-4">
+          <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce"></div>
+          <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:-.3s]"></div>
+          <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:-.5s]"></div>
+        </div>
+      </>
+    );
+  } else {
+    return (
+      <div style={{ borderRadius: "3px", padding: "1rem" }}>
+        {signed && (
+          <>
+          <div className="mb-4">✍️ Document Signed ✍️</div>
+            <div className="grid grid-cols-2 w-[full] gap-2 max-[500px]:grid-cols-1 px-3">
+            <div className="group w-full rounded-lg bg-[rgb(41,49,79)] p-5 transition relative duration-300 cursor-pointer hover:translate-y-[3px] hover:shadow-[0_-8px_0px_0px_rgb(244,67,54)]">
+              <p className="text-white text-2xl">{pieceSize}</p>
+              <p className="text-white text-sm">Piece Size</p>
+            </div>
+            <div className="group w-full rounded-lg bg-[rgb(41,49,79)] p-5 transition relative duration-300 cursor-pointer hover:translate-y-[3px] hover:shadow-[0_-8px_0px_0px_rgb(244,67,54)]">
+              <p className="text-white text-2xl">{carBlob?.size}</p>
+              <p className="text-white text-sm">Car Size</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 w-[full] gap-2 max-[500px]:grid-cols-1 px-3 mt-4">
+            <div className="group w-full rounded-lg bg-[rgb(41,49,79)] p-5 transition relative duration-300 cursor-pointer hover:translate-y-[3px] hover:shadow-[0_-8px_0px_0px_rgb(244,67,54)]">
+              <p className="text-white">{pieceCID}</p>
+              <p className="text-white text-sm">Piece CID</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 w-[full] gap-2 max-[500px]:grid-cols-1 px-3 mt-4">
+            <div className="group w-full rounded-lg bg-[rgb(41,49,79)] p-5 transition relative duration-300 cursor-pointer hover:translate-y-[3px] hover:shadow-[0_-8px_0px_0px_rgb(244,67,54)]">
+              <p className="text-white ">{rootCID.toString()}</p>
+              <p className="text-white text-sm">Car file CID</p>
+            </div>
+          </div>
+            <button className="mt-4" onClick={downloadCarFile}>Download Car file</button>
+          </>
+        )}
+        {!signed && (
+        <button onClick={createDossier}>Sign Document</button>)}
       </div>
-      <button onClick={downloadCarFile}>Download Car file</button>
-    </div>
-  );
+    );
+  }
 }
