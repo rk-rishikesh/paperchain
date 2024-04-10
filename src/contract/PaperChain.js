@@ -1,4 +1,4 @@
-export const PaperChainAddress = "0xc3aE256CcD25FCC63081C9c71825E161280Dd982";
+export const PaperChainAddress = "0xCB130af9A5902E19EeDCDc75248075829dd8a6A3";
 
 export const PaperChainABI = [
   {
